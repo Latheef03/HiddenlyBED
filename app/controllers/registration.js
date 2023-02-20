@@ -464,9 +464,7 @@ exports.imageComparission = async (req, res ) => {
                 text:req.body.text,
                 pic:req.file.filename,
                 placename:req.body.placename
-                
-
-            })
+                 })
             const result = await story.create(data)
             return res.status(200).json({Status:true,result})
         }
