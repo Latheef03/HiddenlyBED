@@ -9,7 +9,8 @@ const uploadLiveaudio=require('../middleware/uploadliveaudio')
 const uploadDocument=require('../middleware/uploadDocument')
 const {upload1,compressGalleryImages}=require('../middleware/uploadimagevideo')
 
-
+const {uploadimage,compressedImg} =require('../middleware/uploadstory')
+const {uploadStorageImageFile} = require('../middleware/storyimage')
 
 
 
@@ -45,8 +46,8 @@ route.post('/cameraimagesupload',uploadcamera.single('camera_img'),onetooneContr
 route.delete('/clearallchat/:roomid',onetooneController.clearChat)
 route.post("/blockcontact", onetooneController.blockContact);
 route.post('/filteringcontact',onetooneController.filteringContact)
-
-
+route.get('/getstory',registrationController.getstory)
+route.post('/addstory',uploadStorageImageFile.single('image'),registrationController.addstory)
 
 
 
