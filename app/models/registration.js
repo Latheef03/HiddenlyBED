@@ -10,7 +10,7 @@ const userSchema = new Schema({
     mobilenumber: {
         type: Number,
         valid:true,
-        minlength:10,
+        max:10000000000,
         default:" "
     },
     qr_image:{
