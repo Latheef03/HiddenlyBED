@@ -9,7 +9,7 @@ const {v4 : uuidv4} = require('uuid')
 exports.getContact=async(req,res)=>{
     try{
 var id = req.body.user_id;
-        const result= await usermaster.find({mobilenumber:{$ne:id}});
+const result= await usermaster.find({mobilenumber:{$ne:id}},{_id:1,mobilenumber:1});
         if( result.length!=0)
         {
             res.send({status:true,message:"Get Data Succesfully",result})
