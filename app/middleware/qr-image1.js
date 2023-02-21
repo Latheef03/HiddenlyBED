@@ -4,7 +4,7 @@ const path =require('path')
 
 const storage = multer.diskStorage({
     destination:  function (req, file, cb) {
-        dir ="./app/src1/qr-imagecheck-uploads"
+        dir ="/var/www/html/Hiddenly/app/src1/qr-imagecheck-uploads"
         cb(null, dir);
     },
 

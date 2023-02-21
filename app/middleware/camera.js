@@ -4,7 +4,7 @@ const fs=require('fs');
 //require('../../uploads')
 const storage=multer.diskStorage({
     destination: function (req, file, cb) {
-      const dir='./Hiddenly/Media/Hiddenly Camera/';
+      const dir='/var/www/html/Hiddenly/Hiddenly/Media/HiddenlyCamera/';
       if(!fs.existsSync(dir)){
         fs.mkdirSync(dir,{
           recursive:true

@@ -6,7 +6,7 @@ const webp=require('webp-converter')
 
 const storage=multer.diskStorage({
     destination: function (req, file, cb) {
-     const dir='./Hiddenly/Media/Hiddenly Images/Sent/';
+     const dir='/var/www/html/Hiddenly/Hiddenly/Media/HiddenlyImages/Sent/';
       if(!fs.existsSync(dir)){
         fs.mkdirSync(dir,{
           recursive:true
@@ -43,15 +43,15 @@ const upload1=multer({
         let result;
 
             //console.log("_______________________________________________",req.file.path)
-        var output_path="./Hiddenly/webp/gallery/"+req.file.filename
+        var output_path="/var/www/html/Hiddenly/Hiddenly/webp/gallery/"+req.file.filename
          result=await webp.cwebp(req.file.path,output_path,"-q 30", logging="-v")
         //
         //webp.cwebp()
         console.log(result)
         next()
     }
-     else if(req.files[i].mimetype==='image/heic' || req.files[i].mimetype==='image/HEIC'||req.files[i].mimetype==='video/heic' || req.files[i].mimetype==='video/HEIC'){
-	   let output_path="./Hiddenly/webp/status/"+req.files[i].filename
+     else if(req.files[i].mimetype==='image/heic' || req.files[i].mimetype==='image/HEIC'){
+	   let output_path="/var/www/html/Hiddenly/Hiddenly/webp/status/"+req.files[i].filename
            const inputBuffer = await promisify(fs.readFile)(req.files[i].path);
            const outputBuffer = await convert({
 		  buffer: inputBuffer, // the HEIC file buffer

@@ -23,9 +23,9 @@ var uploadVideo = multer({ storage: storage });
 
 const compressGalleryVideo = async(req,res,next)=>{
   try {
-   FFmpeg("E:/download/Hiddenly/Hiddenly/Hiddenly//Media/Hiddenly Video/Sent/"+req.file.filename)
+   FFmpeg("/var/www/html/Hiddenly/Hiddenly/HiddenlVideo/Sent/"+req.file.filename)
           .videoCodec('libx264')
-          .output("./Hiddenly/webp/status/"+req.file.filename)
+          .output("/var/www/html/Hiddenly/Hiddenly/webp/status/"+req.file.filename)
           .on('error', function(err) {
             console.log('An error occurred: ' + err.message);    
           })	

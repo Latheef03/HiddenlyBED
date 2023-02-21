@@ -4,7 +4,7 @@ const sharp = require('sharp');
 
 var storage2 = multer.diskStorage({
     destination: function (req, file, cb) {
-	       dir2= "./app/src/story-image"
+	       dir2= "/var/www/html/Hiddenly/app/src/storyimage"
        cb(null, dir2);
     },
     filename: function (req, file, cb) {
