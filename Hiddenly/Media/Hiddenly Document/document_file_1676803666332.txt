@@ -1,0 +1,165 @@
+module 1 registration
+
+schema  usermaster
+
+parameter 
+
+name: typr'string'
+mobilenumber: type'number'
+userimage: type'file'
+about: typr 'string'
+QR code : store
+Otpverify: vrifyotp
+
+
+API required (9)
+
+registration - name: 'string'
+        mobilenumber:'number'
+Otpverify - verify otp hasgdata
+Login - mobilenumber: 'number'
+Updateimage - required img
+Removeimage - required img
+Updateabout - req.body.about
+Deleteaccount - delete account
+QRcodestore - store qrcode 
+blockuser
+
+
+
+module 2 one to one chat
+
+schema chatroom
+
+parameter
+
+objectid- from usermaster
+text
+image
+video
+audio
+document
+link
+contact
+updatbackground
+updattheme
+chathiddenly(timestamp)
+isActive1 - chat disappear active
+isActive0 - chat disappear inactive
+delete
+  
+APi required (19)
+creatroom 
+getallmessage
+storemessage
+textmessage
+senddvideo
+sendaudio
+senddocument
+sendlink
+sendcontact
+sendimage
+clearchat
+chathiddenly(timestamp)
+getuserimage
+getallmedia
+getallcommongroup
+commongroupcount
+reportuser
+setbakground
+settheme
+
+
+module 3 groupchat
+
+schema groupchat
+
+parameter
+
+objectid- from usermaster
+text
+image
+video
+audio
+document
+link
+contact
+updatbackground
+updattheme
+chathiddenly(timestamp)
+isActive1 - chat disappear active
+isActive0 - chat disappear inactive
+groupcreatedat
+groupdeletedat
+groupname
+deletegroup
+
+
+API required (33)
+creatgroup
+groupname
+groupcreatedat
+makeadmin
+demoteadmin
+groupviaklink
+joingroupvialink
+addnewparticipant
+removeparticipant
+leavegroup
+updategroupimage
+removeimage
+timeline(timestamp)
+updateimeline
+contentcustomisation
+image
+text
+audio
+video
+document
+attachment
+updategroupimage
+getmessage
+storemessage
+clearchat
+contact
+getmedia
+participanttotal
+getallticipant
+updatebackground
+settheme
+deletegroup
+reportgroup
+
+
+module 4 status
+
+schema story
+
+parameter
+
+addstatus
+deletestatus
+isActive1 - chat disappear active
+isActive0 - chat disappear inactive
+createdAt
+
+APi required (10)
+addstatus
+deletestatus
+timeline
+getstatus
+seen unseen
+totalviewers
+totalviewerscount
+viewscount
+viewersdayandtime
+replystatus
+
+module 5 setting
+
+schema setting
+
+parameter
+objectid - usermaster
+
+

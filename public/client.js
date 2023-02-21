@@ -119,7 +119,7 @@ socket.on('messageSend',(data)=>{
     formData.append('sender_id',user_id);
     formData.append('room_id',room_id);
       console.log(data1)
-        fetch('/imageandvidofileupload',{method:'post',body:formData})
+        fetch('/imageupload',{method:'post',body:formData})
         .then(Response=>
             Response.json()
             ).then(result=>{
@@ -134,7 +134,28 @@ socket.on('messageSend',(data)=>{
             })
    }
 //End sending files on socket server
- 
+function sendVideo(){
+    data1=document.getElementById('gallery').files[0];
+    const formData = new FormData();
+    formData.append('gallery', data1);
+    formData.append('senderName', "shivchand");
+     formData.append('sender_id',user_id);
+     formData.append('room_id',room_id);
+       console.log(data1)
+         fetch('/videoupload',{method:'post',body:formData})
+         .then(Response=>
+             Response.json()
+             ).then(result=>{
+                 if(result.status==='Success'){
+            socket.emit('user video',result.result)
+                     }
+                 else{
+                     console.log(result)
+                 }
+             }).catch(err=>{
+                 console.log(err)
+             })
+    }
 
  
    //sending document file on socket server

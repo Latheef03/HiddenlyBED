@@ -143,7 +143,7 @@ exports.getmessage=async(req,res)=>{
 //End loading message api
 
 //sent Images
-exports.saveImageAndVideoFile=async(req,res,next)=>{
+exports.saveImageFile=async(req,res,next)=>{
     try{
 	console.log(req.file)
 	const file1=req.file.mimetype

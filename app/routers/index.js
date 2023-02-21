@@ -8,8 +8,8 @@ const uploadAudio=require('../middleware/uploadaudio')
 const uploadLiveaudio=require('../middleware/uploadliveaudio')
 const uploadDocument=require('../middleware/uploadDocument')
 const {upload1,compressGalleryImages}=require('../middleware/uploadimagevideo')
-
-const {uploadimage,compressedImg} =require('../middleware/uploadstory')
+const {uploadVideo,compressGalleryVideo}=require('../middleware/uploadvideo')
+const {uploadimage} =require('../middleware/uploadstory')
 const {uploadStorageImageFile} = require('../middleware/storyimage')
 
 
@@ -36,7 +36,8 @@ route.post('/storemsg',onetooneController.storeMessage)
 route.get('/getmsg/:room_id',onetooneController.getmessage)
 route.get('/getcontact',onetooneController.getContact)
 
-route.post('/imageandvidofileupload',upload1.single('gallery'),compressGalleryImages,onetooneController.saveImageAndVideoFile);
+route.post('/imageupload',upload1.single('gallery'),compressGalleryImages,onetooneController.saveImageFile);
+route.post('/videoupload',uploadVideo.single('gallery'),compressGalleryVideo,onetooneController.saveVideoFile)
 route.post('/documentfileupload',uploadDocument.single('document_file'),onetooneController.saveDocumentFile)
     //audio file upload file
 route.post('/audiofileupload',uploadAudio.single('audio'),onetooneController.saveAudioFile)
@@ -48,7 +49,6 @@ route.post("/blockcontact", onetooneController.blockContact);
 route.post('/filteringcontact',onetooneController.filteringContact)
 route.get('/getstory',registrationController.getstory)
 route.post('/addstory',uploadStorageImageFile.single('image'),registrationController.addstory)
-
 
 
 
