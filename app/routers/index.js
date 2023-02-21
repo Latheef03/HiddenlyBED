@@ -34,7 +34,7 @@ route.post('/compareUser',registrationController.compareUser)
 route.post('/registerRoom',onetooneController.createroom)
 route.post('/storemsg',onetooneController.storeMessage)
 route.get('/getmsg/:room_id',onetooneController.getmessage)
-route.get('/getcontact',onetooneController.getContact)
+route.post('/getcontact',onetooneController.getContact)
 
 route.post('/imageupload',upload1.single('gallery'),compressGalleryImages,onetooneController.saveImageFile);
 route.post('/videoupload',uploadVideo.single('gallery'),compressGalleryVideo,onetooneController.saveVideoFile)
