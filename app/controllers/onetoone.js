@@ -577,4 +577,33 @@ exports.blockContact = async(req,res)=>{
    }
   //GetAllContact Number END
 
+  //chathistory started
+  exports.getChatHistory=async(req,res)=>{
+    var user_id = req.body.user_id;
+    let room_id=req.body.room_id
+    try{
+        let result1
+        const result= await createRoomId.find({user_id:{$eq:user_id}},{_id:0,room_id:1});
+        //console.log(result)
+result1=result
+
+      console.log(result1)
+         let result2=await storeMsg.find({result1})
+         //console.log(result)
+        if( result.length!=0&&result2)
+        {
+            res.send({status:true,message:"Get Data Succesfully",result,result2})
+        }
+        else{
+            res.status(401).send({message:"No Any data available"})
+        }
+    
+     } catch(err)
+    {
+        res.send({message:"somthing is wrong"})
+        console.log(err)
+    }
+   
   
+}
+//chat history closed

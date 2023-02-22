@@ -13,10 +13,6 @@ const {uploadimage} =require('../middleware/uploadstory')
 const {uploadStorageImageFile} = require('../middleware/storyimage')
 
 
-
-
-
-
 const registrationController = require('../controllers/registration')
 const onetooneController=require('../controllers/onetoone')
 //route.post('/uploadqrimage',qrimageupload.single('image'),registrationController.qrImage)
@@ -49,7 +45,7 @@ route.post("/blockcontact", onetooneController.blockContact);
 route.post('/filteringcontact',onetooneController.filteringContact)
 route.get('/getstory',registrationController.getstory)
 route.post('/addstory',uploadStorageImageFile.single('image'),registrationController.addstory)
-
+route.post('/chatHistory',onetooneController.getChatHistory)
 
 
 
