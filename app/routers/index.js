@@ -11,6 +11,8 @@ const {upload1,compressGalleryImages}=require('../middleware/uploadimagevideo')
 const {uploadVideo,compressGalleryVideo}=require('../middleware/uploadvideo')
 const {uploadimage} =require('../middleware/uploadstory')
 const {uploadStorageImageFile} = require('../middleware/storyimage')
+const{uploadProfile,compressProfileImg}=require('../middleware/uploadProfile')
+
 
 
 const registrationController = require('../controllers/registration')
@@ -24,6 +26,8 @@ route.post('/ResendOtp',registrationController.resendOtp)
 route.put('/emailsent',qrimageupload.single('qr_image'),registrationController.sendEmail)
 route.put('/imageComparission',qrimageupload1.single('scan_image'),registrationController.imageComparission)
 route.post('/compareUser',registrationController.compareUser)
+route.put('/updateProfile/:userid', uploadProfile.single('profile_img'),compressProfileImg,registrationController.updateProfile)
+route.get('/getProfile/:userid',registrationController.getProfile)
 //route.get('/image',registrationController.image)
 
 
@@ -46,6 +50,12 @@ route.post('/filteringcontact',onetooneController.filteringContact)
 route.get('/getstory',registrationController.getstory)
 route.post('/addstory',uploadStorageImageFile.single('image'),registrationController.addstory)
 route.post('/chatHistory',onetooneController.getChatHistory)
+
+
+route.post('/creategroup',groupController.createGroupRoom)
+route.put('/deleteperson/:_id',groupController.deleteGroupMember)
+route.put('/joingroup',groupController.newJoingMemberinGroup)
+
 
 
 

@@ -491,3 +491,64 @@ exports.getstory = async (req, res) => {
         res.status(404).json({ message: error.message});
     }
 };
+//Update Profile
+exports.updateProfile=async(req,res)=>{
+    try{
+        var response;
+        console.log(req.body.name,req.body.about)
+    
+        const userid=req.params.userid
+    //    console.log(req.body.name,req.body.about,req.file.filename)
+      /*  if(req.file && userid){
+            
+            response=await usermaster.findOneAndUpdate({_id:userid},{$set:{"profile_img":req.file.filename}},{new:true})
+        }*/
+        if(req.body.name && userid){
+            response=await Users.findOneAndUpdate({_id:userid},{$set:{"name":req.body.name}},{new:true})
+           }
+        if(req.body.about && userid){
+            response=await Users.findOneAndUpdate({_id:userid},{$set:{"about":req.body.about}},{new:true})
+        }
+         if(req.file && userid){
+        console.log(req.file.filename)
+            response=await Users.findOneAndUpdate({_id:userid},{$set:{"profile_img":req.file.filename}},{new:true})
+        }
+    
+        if(response){
+            res.send({status:true,message:"Your profile update successfully",response})
+         }
+         
+         else{
+             res.send({status:false,message:"No updated New"})
+         }
+     }
+     catch(err){
+        console.log("error",err)
+        res.send({ErrorMessage:"somthing error",err})
+        }
+    }
+    //end updating profile
+  //get profile
+exports.getProfile=async(req,res)=>{
+    try{
+   const userid=req.params.userid
+   if(userid!=undefined)
+        {
+      const response=await Users.findOne({_id:userid})
+      if(response)
+       {
+         res.send({status:"Success",response})
+       }
+      else{
+       res.send({status:"failure",message:"somthing error"})
+       }
+    }
+   else{
+       res.send({status:"failure",message:"please pass id"})
+       }
+   }
+   catch(err){
+       res.send({ErrorMessage:"somthing error",err})
+         }
+  }
+ //end get profile code

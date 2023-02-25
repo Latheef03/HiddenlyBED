@@ -582,17 +582,30 @@ exports.blockContact = async(req,res)=>{
     var user_id = req.body.user_id;
     let room_id=req.body.room_id
     try{
-        let result1
-        const result= await createRoomId.find({user_id:{$eq:user_id}},{_id:0,room_id:1});
-        //console.log(result)
-result1=result
+        const result= await createRoomId.find({user_id:{$eq:user_id}},{_id:0,room_id:1})
+        console.log(result)
+        const roomIds = result.map(doc => doc.room_id);
+  console.log(roomIds);
 
-      console.log(result1)
-         let result2=await storeMsg.find({result1})
+
+        /* let result2=await storeMsg.find({result1})
          //console.log(result)
-        if( result.length!=0&&result2)
+*/
+     //    db.createroomids.aggregate([{$match:{room_id:"1ba7f950-21a2-49c6-a0d5-0f8942c8a19d"}},{$lookup:{from:"storemsgs",localField:"room_id",foreignField:"room_id",as:"data"}}]).pretty()`
+    const result2= await createRoomId.aggregate([
+        { $match: { room_id:{$in:roomIds} } },
         {
-            res.send({status:true,message:"Get Data Succesfully",result,result2})
+          $lookup: {
+            from: 'storemsgs',
+            localField: "room_id",
+            foreignField: "room_id",
+            as: "data"
+          }
+        }
+      ])
+        if( result2 )
+        {
+            res.send({status:true,message:"Get Data Succesfully",result2})
         }
         else{
             res.status(401).send({message:"No Any data available"})
@@ -603,7 +616,5 @@ result1=result
         res.send({message:"somthing is wrong"})
         console.log(err)
     }
-   
-  
 }
 //chat history closed
