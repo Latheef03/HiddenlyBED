@@ -17,6 +17,7 @@ const{uploadProfile,compressProfileImg}=require('../middleware/uploadProfile')
 
 const registrationController = require('../controllers/registration')
 const onetooneController=require('../controllers/onetoone')
+const groupController=require('../controllers/groupchat')
 //route.post('/uploadqrimage',qrimageupload.single('image'),registrationController.qrImage)
 
 route.post('/registration',registrationController.registration);
@@ -28,6 +29,7 @@ route.put('/imageComparission',qrimageupload1.single('scan_image'),registrationC
 route.post('/compareUser',registrationController.compareUser)
 route.put('/updateProfile/:userid', uploadProfile.single('profile_img'),compressProfileImg,registrationController.updateProfile)
 route.get('/getProfile/:userid',registrationController.getProfile)
+route.delete('/deleteAccount/:userid',registrationController.deleteAccount)
 //route.get('/image',registrationController.image)
 
 

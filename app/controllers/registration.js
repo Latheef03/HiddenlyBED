@@ -552,3 +552,29 @@ exports.getProfile=async(req,res)=>{
          }
   }
  //end get profile code
+ //delete profile
+ exports.deleteAccount=async(req,res)=>{
+    try{
+   const userid=req.params.userid
+   if(userid!=undefined)
+        {
+      const response=await Users.findOneAndDelete({_id:userid})
+      if(response)
+       {
+         res.send({status:"Success",response})
+       }
+      else{
+       res.send({status:"failure",message:"somthing error"})
+       }
+    }
+   else{
+       res.send({status:"failure",message:"please pass id"})
+       }
+   }
+   catch(err){
+       res.send({ErrorMessage:"somthing error",err})
+         }
+  }
+  //delete profile complete
+
+  

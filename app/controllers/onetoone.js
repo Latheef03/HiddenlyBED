@@ -578,7 +578,7 @@ exports.blockContact = async(req,res)=>{
   //GetAllContact Number END
 
   //chathistory started
-  exports.getChatHistory=async(req,res)=>{
+exports.getChatHistory=async(req,res)=>{
     var user_id = req.body.user_id;
     let room_id=req.body.room_id
     try{
