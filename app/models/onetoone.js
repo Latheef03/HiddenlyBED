@@ -17,7 +17,14 @@ const chatApplicationSchema=mongoose.Schema({
         require:true,
         unique:true
     },
-    
+    setbackground:{
+        type:String,
+	default:''
+    },
+    setTheme:{
+        type:String,
+        default:''
+    }
 });
 const createRoomId=mongoose.model('createRoomId',chatApplicationSchema);
 module.exports={createRoomId}

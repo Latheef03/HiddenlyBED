@@ -37,6 +37,14 @@ const userSchema = new Schema({
                 },
                 default:" "
             },
+            profile_img:{
+                type:String,
+                default:""
+                },
+    about:{
+                type:String,
+                default:""
+                 },
     contactList:{
                 type:Object,
                 default:" "
@@ -44,7 +52,15 @@ const userSchema = new Schema({
     blockContact:{
                 type:Array,
                 default:[]
-              }
+              },
+    isActive1:{
+        type:Number,
+        default:" "
+    },
+    isActive0:{
+        type:Number,
+        default:" "
+    }
 });
 
 module.exports = mongoose.model('usermaster', userSchema, 'usermasters');

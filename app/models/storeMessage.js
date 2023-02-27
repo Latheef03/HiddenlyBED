@@ -36,6 +36,9 @@ const storeMsgSchema=mongoose.Schema({
     room_id:{
         type:String,
         required:true
+    },
+    expiresAt:{
+        
     }
     
     

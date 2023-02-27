@@ -2,6 +2,7 @@ const {createRoomId}=require('../models/onetoone')
 const storeMsg=require('../models/storeMessage')
 const usermaster=require('../models/registration')
 const {v4 : uuidv4} = require('uuid')
+const { set } = require('mongoose')
 
 
 
@@ -484,7 +485,7 @@ exports.filteringContact = async(req,res)=>{
 
   
 
- //Block Contact START
+//Block Contact START
 exports.blockContact = async(req,res)=>{
     try{
         const {user_id,other_number} = req.body
@@ -618,3 +619,90 @@ exports.getChatHistory=async(req,res)=>{
     }
 }
 //chat history closed
+
+//view contact has started
+exports.viewContact=async(req,res)=>{
+    try{
+        const {other_id}=req.body
+        const response = await usermaster.findOne({mobilenumber:other_id})
+        if(response){
+            res.send({status:true,message:"Get Data Succesfully",response})
+        }
+        else{
+            res.status(401).send({message:"user not found"})
+        }
+    }catch(err)
+    {
+        res.send({message:"somthing is wrong"})
+        console.log(err)
+    }
+}
+//view contact ended
+
+//setbackgroun started
+exports.setbackground=async(req,res)=>{
+    try{
+        const {room_id}=req.body
+        if(req.file&&room_id){
+        setbackground=req.file.filename
+        const result= await createRoomId.findOneAndUpdate({room_id:room_id},{$set:{setbackground:setbackground}},{new:true})
+        console.log(result)
+        res.send({status:true,message:"background updated successfully",result})
+
+    }else{
+        res.status(401).send({message:"select background image"})
+    }
+    
+}catch(err)
+{
+    res.send({message:"somthing is wrong"})
+    console.log(err)
+}
+}
+//setbackground ended
+
+//setthem started
+exports.setTheme=async(req,res)=>{
+    try{
+        const {room_id,setTheme}=req.body
+        if(room_id){
+        const result= await createRoomId.findOneAndUpdate({room_id:room_id},{$set:{setTheme:setTheme}},{new:true})
+        console.log(result)
+        res.send({status:true,message:"background updated successfully",result})
+
+    }else{
+        res.status(401).send({message:"select background image"})
+    }
+    
+}catch(err)
+{
+    res.send({message:"somthing is wrong"})
+    console.log(err)
+}
+}
+//settheme ended
+//deleteroom started
+exports.deleteRoom=async(req,res)=>{
+    try{
+        const roomid=req.params.roomid
+        if(roomid){
+        const result= await createRoomId.findOneAndDelete({room_id:roomid})
+        console.log(result)
+        res.send({status:true,message:"room deleted successfully",result})
+
+    }else{
+        res.status(401).send({message:"can not be deleted pls check"})
+    }
+    
+}catch(err)
+{
+    res.send({message:"somthing is wrong"})
+    console.log(err)
+}
+}
+//deleteroom ended
+
+//chathiddenly started
+
+//chathiddenly endeed
+
