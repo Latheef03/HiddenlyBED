@@ -38,9 +38,9 @@ const storeMsgSchema=mongoose.Schema({
         required:true
     },
     expiresAt:{
-        
+        type: Date,
+    index: { expires:0 } 
     }
-    
     
 },{ timestamps: true });
 

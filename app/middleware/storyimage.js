@@ -2,7 +2,7 @@ const multer = require('multer');
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        dir ="/var/www/html/Hiddenly/app/src/story"
+        dir ="./app/src/story"
         cb(null, dir)
     },
     filename: (req, file, cb) => {

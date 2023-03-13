@@ -4,7 +4,7 @@ const fs=require('fs')
 
 const storage=multer.diskStorage({
     destination:function(req,res,cb){
-        const dir = '/var/www/html/Hiddenly/Hiddenly/Media/HiddenlyDocument/'
+        const dir = './Hiddenly/Media/HiddenlyDocument/'
         if(!fs.existsSync(dir))
         {
             fs.mkdirSync(dir,{

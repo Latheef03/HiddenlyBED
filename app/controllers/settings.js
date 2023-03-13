@@ -15,7 +15,7 @@ exports.updateProfile=async(req,res)=>{
             response=await usermaster.findOneAndUpdate({_id:userid},{$set:{"profile_img":req.file.filename}},{new:true})
         }*/
         if(req.body.name && userid){
-            response=await Users.findOneAndUpdate({_id:userid},{$set:{"name":req.body.name}},{new:true})
+            response=await Users.findOneAndUpdate({_id:userid},{$set:{'name':req.body.name}},{new:true})
            }
         if(req.body.about && userid){
             response=await Users.findOneAndUpdate({_id:userid},{$set:{"about":req.body.about}},{new:true})
@@ -32,12 +32,12 @@ exports.updateProfile=async(req,res)=>{
          else{
              res.send({status:false,message:"No updated New"})
          }
-     }
-     catch(err){
-        console.log("error",err)
-        res.send({ErrorMessage:"somthing error",err})
-        }
+     
+}catch(err){
+    console.log("error",err)
+    res.send({ErrorMessage:"somthing error",err})
     }
+}
     //end updating profile
   //get profile
 exports.getProfile=async(req,res)=>{
@@ -126,3 +126,101 @@ exports.getProfile=async(req,res)=>{
         res.send({ErrorMessage:"somthing error",err})
         }
     }
+    //block contact
+    exports.blockContact = async(req,res)=>{
+        try{
+            const {user_id,other_number} = req.body
+            const result1=await Users.findOne({mobilenumber:user_id},{_id:0,blockContact:1})
+            console.log(result1)
+            const result2=result1.blockContact
+            console.log(result2)
+            if(!user_id || !other_number){
+                return res.status(406).json({status:'Failure',message:'user_id and other_number are required field'})
+            }else if(!result2.includes(other_number)) {
+
+                const response = await Users.findOneAndUpdate({mobilenumber:user_id},{$push:{blockContact:[other_number]}})
+                if(response){
+                return res.status(200).send({status:'Success',message:'',response})
+                }
+             
+            }else{
+                return res.status(406).json({status:'Failure',message:'already in blocked contact'})
+            }
+    
+        }catch(err){
+            console.log(err);
+            return res.status(400).json({status:'Error',message:'somthing went wrong',err})
+        }
+    }
+
+    //block contact ended
+    //unblock contact started
+exports.unBlockContact=async(req,res)=>{
+    try{
+        const {user_id,other_number} = req.body
+        const result1=await Users.findOne({mobilenumber:user_id},{_id:0,blockContact:1})
+        console.log(result1)
+        const result2=result1.blockContact
+        console.log(result2)
+        if(!user_id || !other_number){
+            return res.status(406).json({status:'Failure',message:'user_id and other_number are required field'})
+        }else if(result2.includes(other_number)) {
+
+            const response = await Users.findOneAndUpdate({mobilenumber:user_id},{$pull:{blockContact:[other_number]}})
+            if(response){
+            return res.status(200).send({status:'Success',message:'',response})
+            }
+         
+        }else{
+            return res.status(406).json({status:'Failure',message:'already in blocked contact'})
+        }
+
+    }catch(err){
+        console.log(err);
+        return res.status(400).json({status:'Error',message:'somthing went wrong',err})
+    }
+}
+//end of unblock
+//starat get all blocklist
+exports.getBlockContact=async(req,res)=>{
+    try{
+        const {user_id} = req.body
+        if(!user_id){
+            return res.status(406).json({status:'Failure',message:'user_id and are required field'})
+        }else  {
+            const response=await Users.findOne({mobilenumber:user_id},{_id:0,blockContact:1})
+            console.log(response)
+            if(response){
+            return res.status(200).send({status:'Success',message:'data fetched blockcontact',response})
+            }
+         
+        }
+
+    }catch(err){
+        console.log(err);
+        return res.status(400).json({status:'Error',message:'somthing went wrong',err})
+    }
+}
+//end blocklist
+
+//change usermobilenumber
+exports.changeNumber=async(req,res)=>{
+    try{
+    const{_id,mobilenumber}=req.body
+    if(!_id||!mobilenumber){
+        return res.status(406).json({status:'Failure',message:'mobilenumber and are required field'})
+    }else{
+        const response=await Users.findOneAndUpdate({_id:_id},{$set:{mobilenumber:mobilenumber}})
+        if(response){
+            console.log(response)
+            return res.status(200).send({status:'Success',message:'data fetched blockcontact',response})
+        }
+    }
+}catch(err){
+    console.log(err);
+    return res.status(400).json({status:'Error',message:'somthing went wrong',err})
+}
+}
+
+//changes mobilenumber ended
+

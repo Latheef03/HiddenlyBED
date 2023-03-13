@@ -17,44 +17,37 @@ const createGroupSchema=new mongoose.Schema({
         required:true
     },
    group_profile_img:{
-         type:String
+         type:String,
+         default:" "
     },
 	 groupName:{
         type:String
     },
-   about:{
+    setbackground:{
+        type:String,
+	default:""
+    },
+    setTheme:{
+        type:String,
+        default:''
+    } ,
+   Groupabout:{
         type:String,
 	default:""
 	},
   
   autoDelete:{
         type:Date,
-        default:''
+        //index: { expireAfterSeconds: 4 }
     },
     content_customization:{
-        text:{
-            type:Boolean,
-            default:false
-        },
-        voice:{
-            type:Boolean,
-            default:false
-        },
-        media:{
-            type:Boolean,
-            default:false
-        },
-        documents:{
-            type:Boolean,
-            default:false
-        },
-        attachments:{
-            type:Boolean,
-            default:false
-        }
-    }   
-    
+        type:Number,
+        default:''
+    }
  },{ timestamps: true })
 
 const CreateGroup=mongoose.model('createGroup',createGroupSchema)
 module.exports={CreateGroup}
+
+
+

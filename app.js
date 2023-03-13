@@ -36,19 +36,19 @@ let usersJoin={}
 io.on('connection',(socket)=>{
     console.log("A user connected=",socket.id);
     //joing room by roomid through
-    socket.on('LoginUserJoin',(mobile)=>{
-	let m=String(mobile)
-	socket.join(String(mobile))
-        console.log('joining for mobile',mobile)
-	console.log('type',typeof m)
-        if(!usersJoin[socket.id]){
-	     usersJoin[socket.id]=mobile
-          }
-    })
-    socket.on('demo',(msg)=>{
-       console.log(msg)
+    // socket.on('LoginUserJoin',(mobile)=>{
+	// let m=String(mobile)
+	// socket.join(String(mobile))
+    //     console.log('joining for mobile',mobile)
+	// console.log('type',typeof m)
+    //     if(!usersJoin[socket.id]){
+	//      usersJoin[socket.id]=mobile
+    //       }
+    // })
+    // socket.on('demo',(msg)=>{
+    //    console.log(msg)
     
-      })
+    //   })
     socket.on('joinRoom',(room)=>{
         console.log("joing for room is ",room)
         socket.join(room);
@@ -94,11 +94,51 @@ io.on('connection',(socket)=>{
 	         //socket.broadcast.to(other_id).emit('notificationMsg',data);
            }*/
        })
-    //end for transmitting coding
- 
+       //group message
+       socket.on('groupmessage',(data)=>{
+       console.log('groupmessage',data)
+       io.to(data.room_id).emit('groupmessage',data)
+    })
+    //group message end
+           //group send image
+           socket.on('groupimage',(data)=>{
+            console.log('groupimage',data)
+            io.to(data.room_id).emit('groupimage',data)
+         })
+         //group image end
+           //group send video
+           socket.on('groupvideo',(data)=>{
+            console.log('groupvideo',data)
+            io.to(data.room_id).emit('groupvideo',data)
+         })
+         //group video end
+//group send audioi
+socket.on('groupaudio',(data)=>{
+    console.log('groupaudio',data)
+    io.to(data.room_id).emit('groupaudio',data)
+ })
+ //group image audio
+//group send document
+socket.on('groupdocument',(data)=>{
+    console.log('groupdocument',data)
+    io.to(data.room_id).emit('groupdocument',data)
+ })
+ //group document end
+//end for transmitting coding
+    socket.on('getmessage',(result)=>{
+        console.log('socket message1',data)
+        io.to(data.room_id).emit('getmessage',data)
+}) 
+//uservideo
+socket.on('user video',data=>{
+    console.log("image",data.result.room_id)
+    //socket.broadcast.to(data.room_id).emit('user audio',data);
+    io.to(data.room_id).emit('user video',data)
+})
+//End audio fies
     //come to gallery  file in socket server
     socket.on('user gallery',data=>{
-        console.log("image",data)
+        console.log("image",data.result.room_id)
         //socket.broadcast.to(data.room_id).emit('user gallery',data);
         io.to(data.room_id).emit('user gallery',data)
     }) 
@@ -160,7 +200,8 @@ mongoose.connect(dbConfig.url, {
     console.log('Could not connect to the database', err);
     process.exit();
 });
-const route =require('./app/routers/index')
+const route =require('./app/routers/index');
+const databaseConfig = require('./config/database.config.js');
 app.use('/', route);
 
 app.get('/', (req, res) => {

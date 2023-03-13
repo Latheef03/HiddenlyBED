@@ -7,7 +7,7 @@ const chatApplicationSchema=mongoose.Schema({
     },
     other_id:
     {
-        type:String,
+        type:Number,
 	//required:true
         
     },
@@ -25,6 +25,6 @@ const chatApplicationSchema=mongoose.Schema({
         type:String,
         default:''
     }
-});
+},{ timestamps: true });
 const createRoomId=mongoose.model('createRoomId',chatApplicationSchema);
 module.exports={createRoomId}

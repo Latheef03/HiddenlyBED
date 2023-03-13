@@ -11,7 +11,7 @@ const storage=multer.diskStorage({
                 recursive:true
             })
         }*/
-        cb(null,'./Hiddenly/Media/Hiddenlybackground/')
+        cb(null,'/var/www/html/Hiddenly/Hiddenly/Media/Hiddenlybackground/')
     },
     filename:(req,file,cb)=>{
 	var name=file.fieldname+"_"+Date.now()+path.extname(file.originalname)

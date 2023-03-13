@@ -9,8 +9,8 @@ const userSchema = new Schema({
     },
     mobilenumber: {
         type: Number,
-        valid:true,
-        max:10000000000,
+        // valid:true,
+        // max:10000000000,
         default:" "
     },
     qr_image:{
@@ -61,7 +61,6 @@ const userSchema = new Schema({
         type:Number,
         default:" "
     }
-});
+},{ timestamps: true });
 
-module.exports = mongoose.model('usermaster', userSchema, 'usermasters');
-
+module.exports = mongoose.model('usermaster', userSchema, );

@@ -105,7 +105,7 @@ $(document).ready(()=>{
 
 //catch message on the server
 socket.on('messageSend',(data)=>{
-    console.log(data)
+    //console.log(data)
     socket.emit('messageSend',data)
 })
 //end code of cath message

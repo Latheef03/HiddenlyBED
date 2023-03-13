@@ -1,6 +1,8 @@
 const {createRoomId}=require('../models/onetoone')
+const {CreateGroup}=require('../models/groupchat')
 const storeMsg=require('../models/storeMessage')
 const usermaster=require('../models/registration')
+const schedule = require('node-schedule')
 const {v4 : uuidv4} = require('uuid')
 const { set } = require('mongoose')
 
@@ -9,7 +11,7 @@ const { set } = require('mongoose')
 //get all contact
 exports.getContact=async(req,res)=>{
     try{
-        const {mobilenumber}=req.body
+        const {mobilenumber,contactList}=req.body
         const result= await usermaster.find({mobilenumber:mobilenumber},{_id:1,mobilenumber:1});
         if( result.length!=0)
         {
@@ -385,78 +387,6 @@ exports.clearChat=(req,res)=>{
     }
 
 
-   //filtering contact
-      /*const filteringContact=async(req,res)=>{
-       try{
-        if(!req.body){
-            res.sed({message:"No Any Data Found from body "})
-        }
-	//console.log("shivchand",req.body.allContacts)
-        if(req.body.allContacts.length>0){
-            const arr=req.body.allContacts
-	    //console.log(arr)
-	    const userid=req.body.user_id
-            const contact =[]
-	    const invite=[]
-            for(let i=0;i<arr.length;i++){
-                let element=arr[i]
-		let obj=element
-		let number = element.number
-		console.log("length",typeof number,element)
-		if(number!=undefined){
-                   if(number.length>10){
-                      let length = number.length
-		   // console.log("-------->l",length)
-                    if(length===12){
-                        number = number.substring(2)
-                    }
-                    else if(length===13){
-                        number = number.substring(3)
-                    }
-                   }
-		}
-		//console.log(element.number)
-                const result=await usermaster.findOne({mobilenumber:number})
-                    if(result && result.mobilenumber!=userid)
-			{
-			obj.number = number
-		  	obj.about=result.about ||""
-                        obj.profile_img=result.profile_img||""
-			obj.block=false
-			 contact.push(obj)
-
-			}
-			else if(obj.number!=userid){
-			     invite.push(obj)
-			    }
-   	                    //contact.push(element)
-            }
-        
-            //console.log(contact)
-             if(contact.length!=0||invite.length!=0){
-                 console.log("success",contact,invite)
-		 await usermaster.updateMany({mobilenumber:userid},{$set:{contactList:contact}})
-               res.send({status:"Success",contact,invite})
-               }
-	   else{
-		res.send({status:"Failure",message:"No Any Contact here"})
-
-		}
-            
-        }
-        else{
-            res.send({status:"Failure",message:"Please Provide Contact List"})
-        }
-    }
-
-
-catch(error){
-console.log(error)
-        res.send({status:"Failure",message:"Somthing Error"})
-    }
-   }*/
-  
-    //filtering contact start
 exports.filteringContact = async(req,res)=>{
     try{
         const {user_id,allContacts} = req.body
@@ -483,130 +413,84 @@ exports.filteringContact = async(req,res)=>{
   }
   //contact filtering contact end
 
-  
-
-//Block Contact START
-exports.blockContact = async(req,res)=>{
-    try{
-        const {user_id,other_number} = req.body
-        if(!user_id || !other_number){
-            return res.status(406).json({status:'Failure',message:'user_id and other_number are required field'})
-        }else{
-            const user = await usermaster.findOne({mobilenumber:user_id})
-            //console.log(user);
-            let {contactList,blockContact} = user
-            //let contactlist = [];
-            let obj = {};
-            let list = contactList.filter(data=>{
-                if(data.number===other_number){
-                    data.block=true
-                    obj = {...data}
-                }else{
-                    return data
-                }
-            })
-            console.log("obj",obj);
-            console.log("list",list,blockContact);
-            if(Object.keys(obj).length!=0){
-                //console.log("sklgj;lajgh;lash......");
-                obj.block=true
-                user.blockContact.push(obj)
-                user.contactList = list
-                await user.save()
-            }else{
-                console.log("else condition",blockContact);
-                obj = blockContact.find(v=>{
-                    console.log("v condition");
-                    return v.number===other_number
-                })
-                console.log(obj);
-                if(Object.keys(obj).length!=0){
-                    console.log("block",obj);
-                    list = [...list,obj]
-                    //user.blockContact.pull(obj)
-                    await usermaster.updateOne( {mobilenumber:user_id},{ $pull: {blockContact:obj}});
-                    obj.block=false
-                    user.contactList = list
-                    await user.save()
-                }
-            }
-            if(Object.keys(obj).length!=0){
-                let message = (obj.block===true)?"contact block successfully":"contact unblock successfully"
-                return res.status(200).json({status:'Success',message:message,obj})
-            }else{
-                return res.status(200).json({status:'Failure',message:'Some Technical Issue'})
-            }
-        }
-
-    }catch(err){
-        console.log(err);
-        return res.status(400).json({status:'Error',message:'somthing went wrong'})
-    }
-}
-//Block Contact END
- 
-
-  
-   //filter ten digit start
-   function findTenDigitNumber(number){
-    if(number!=undefined){
-        if(number.length>10){
-            if(number.length===12)
-                number = number.substring(2)
-            else if(number.length===13)
-                number = number.substring(3)
-        }
-    }
-    return number;
- }
- //filtering ten digit end
-
-  //Remove 91 number form the contact Number START
-  const remove91Number = (allContacts) =>{
-    let allcontact = allContacts.map(data=>{
-         data.number = findTenDigitNumber(data.number)
-         return data
-    })
-    return allcontact
-  }
-  //Remove 91 number form the contact Number START
-
-  //GetAllContact Number START
-   const getAllContactNumber = (contactList) =>{
-         let contact = contactList.map(obj=>findTenDigitNumber(obj.number))
-         return contact
-   }
-  //GetAllContact Number END
-
   //chathistory started
 exports.getChatHistory=async(req,res)=>{
     var user_id = req.body.user_id;
-    let room_id=req.body.room_id
     try{
-        const result= await createRoomId.find({user_id:{$eq:user_id}},{_id:0,room_id:1})
+        const result= await createRoomId.find({user_id:{$eq:user_id}},{_id:0,room_id:1,other_id:1})
         console.log(result)
+        const other_id1 = result.map(doc => doc.other_id);
+       console.log(other_id1);
+        const result1=await CreateGroup.find({user_id:{$eq:user_id}},{_id:0,room_id:1,joining_group:1,admin_id:1})
+        console.log(result1)
+        const joining_groups = result1.map(doc => doc.joining_group);
+        console.log(joining_groups);
+        const admin_ids = result1.map(doc => doc.admin_id);
+        console.log(admin_ids);
+        const other_ids=joining_groups.concat(admin_ids)
+        console.log(other_ids)
         const roomIds = result.map(doc => doc.room_id);
   console.log(roomIds);
-
-
+  
+            const roomIds1=result1.map(doc => doc.room_id)
+        console.log(roomIds1)
         /* let result2=await storeMsg.find({result1})
          //console.log(result)
 */
      //    db.createroomids.aggregate([{$match:{room_id:"1ba7f950-21a2-49c6-a0d5-0f8942c8a19d"}},{$lookup:{from:"storemsgs",localField:"room_id",foreignField:"room_id",as:"data"}}]).pretty()`
-    const result2= await createRoomId.aggregate([
-        { $match: { room_id:{$in:roomIds} } },
+   
+     const result2 = await createRoomId.aggregate([
+        {
+          $match: {
+            other_id: { $in: other_id1 },
+            room_id: { $in: roomIds }
+          }
+        },
         {
           $lookup: {
-            from: 'storemsgs',
+            from: "storemsgs",
             localField: "room_id",
             foreignField: "room_id",
             as: "data"
           }
-        }
-      ])
-        if( result2 )
+        },
         {
-            res.send({status:true,message:"Get Data Succesfully",result2})
+          $lookup: {
+            from: "usermasters",
+            localField: "other_id",
+            foreignField: "mobilenumber",
+            as: "otherdata"
+          }
+        }
+    ])
+      
+     console.log(result2)
+     const result3 = await CreateGroup.aggregate([
+        {
+          $match: {
+            room_id: { $in: roomIds1 },
+          }
+        },
+        {
+          $lookup: {
+            from: 'storemsgs',
+            localField: 'room_id',
+            foreignField: 'room_id',
+            as: 'data'
+          }
+        }
+      ]);
+      
+     console.log(result3)
+ 
+      const result4=result2.concat(result3)
+     console.log(result4)
+// const response = await usermaster.find({mobilenumber:other_id1},{mobilenumber:1,profile_img:1,_id:0})
+      
+//       console.log(response)
+        if( result4)
+        {
+            res.send({status:true,message:"Get Data Succesfully",result4})
         }
         else{
             res.status(401).send({message:"No Any data available"})
@@ -619,7 +503,6 @@ exports.getChatHistory=async(req,res)=>{
     }
 }
 //chat history closed
-
 //view contact has started
 exports.viewContact=async(req,res)=>{
     try{
@@ -702,7 +585,76 @@ exports.deleteRoom=async(req,res)=>{
 }
 //deleteroom ended
 
+
+
+//sendConact started
+exports.sendContact=async(req,res)=>{
+    try{
+        const roomid=req.body.roomid
+        if(roomid){
+        const result= await createRoomId.findOne({room_id:roomid})
+        console.log(result)
+        if(result){
+            if(req.file){
+                const otherid=req.body.sender_id
+                const name=req.body.senderName
+                const image=req.file.filename
+            }
+        }
+        res.send({status:true,message:"room deleted successfully",result})
+
+    }else{
+        res.status(401).send({message:"can not be deleted pls check"})
+    }
+    
+}catch(err)
+{
+    res.send({message:"somthing is wrong"})
+    console.log(err)
+}
+}
+//sendContact ended
 //chathiddenly started
-
-//chathiddenly endeed
-
+exports.chathiddenly=async(req,res)=>{
+        try {
+            // Schedule the job to delete old messages
+            const job = schedule.scheduleJob(new Date(Date.now() + 24 * 60 * 1000), async function() {
+              try {
+                const cutoffDate = new Date(Date.now() - 24 * 60 * 1000); // 2 minutes ago
+                const result = await storeMsg.deleteMany({ createdAt: { $gte: cutoffDate } });
+                console.log(`Deleted ${result.deletedCount} chat Hiddenly is activated, The after 24hrs messages will be dissapear`);
+              } catch (err) {
+                console.error(err);
+              }
+            });
+            // Respond with success message
+            res.status(200).json({ message: 'chat Hiddenly is activated, The after 24hrs messages will be dissapear',result});
+        
+          } catch (err) {
+            console.error(err);
+            res.status(500).json({ error: 'Error starting scheduled job.' });
+          }
+        };
+//chathiddenly started  
+//common group started
+exports.commonGroup=async(req,res)=>{
+    try{
+const {sender_id,other_id}=req.body
+console.log(sender_id,other_id)
+const query = {
+   
+          $and: [
+           { joining_group: { $in: [sender_id, other_id] }},
+           { admin_id: { $in: [sender_id, other_id] }}
+           ]
+        }
+  const results = await CreateGroup.find(query).exec();
+  console.log(results)
+  res.send({status:true,message:"room fetched successfully",results})
+    }catch(err)
+    {
+        res.status(400).send({message:"somthing is wrong"})
+        console.log(err)
+    }
+}
+//common group ended

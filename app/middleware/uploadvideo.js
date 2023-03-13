@@ -9,7 +9,7 @@ FFmpeg.setFfmpegPath(ffmpeg.path);
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      var dir = './Hiddenly/Media/Hiddenly Video/Sent/'
+      var dir = '/var/www/html/Hiddenly/Hiddenly/Media/HiddenlyVideo/Sent/'
         cb(null, dir);
     },
 
@@ -23,9 +23,9 @@ var uploadVideo = multer({ storage: storage });
 
 const compressGalleryVideo = async(req,res,next)=>{
   try {
-   FFmpeg("/var/www/html/Hiddenly/Hiddenly/HiddenlVideo/Sent/"+req.file.filename)
+   FFmpeg("/var/www/html/Hiddenly/Hiddenly/Media/HiddenlyVideo/Sent/"+req.file.filename)
           .videoCodec('libx264')
-          .output("/var/www/html/Hiddenly/Hiddenly/webp/status/"+req.file.filename)
+          .output("./Hiddenly/webp/status/"+req.file.filename)
           .on('error', function(err) {
             console.log('An error occurred: ' + err.message);    
           })	
